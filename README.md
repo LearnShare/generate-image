@@ -20,8 +20,19 @@ or
 <script src="path/to/generate-image.min.js"></script>
 ```
 
-1. Automatic: `<img src="" data-gi="w=300&h=150">`, 'src' should be empty
-2. Programmatic:
+1\. Automatic:
+
+```html
+<img src="" data-gi="w=300&h=150">
+
+<script>
+  document.addEventListener('load', () => {
+    GenerateImage.auto('data-gi');
+  });
+</script>
+```
+
+2\. Programmatic:
 
 ```js
 const target = document.getElementById('image-target');
@@ -46,13 +57,18 @@ const imageData = GenerateImage({
 
 ## API
 
-### GenerateImage(options, mode, encode)
+### GenerateImage.auto(attr)
+
+| argument | required | default | info |
+|----------|----------|---------|------|
+| attr     | -        | 'data-gi' | data attr that provide option string for `<img>` |
+
+### GenerateImage(options, encode)
 
 | argument | required | default | info |
 |----------|----------|---------|------|
 | options  | -        | -       | [options](#options) |
-| mode     | -        | 'svg'     | render to 'svg' or 'png' (use canvas, and in browser only) |
-| encode   | -        | true    | encode svg to `data:image/svg+xml`, or png to `data:image/png;base64`. if 'false', return pure svg or [ImageData](https://developer.mozilla.org/en-US/docs/Web/API/ImageData) |
+| encode   | -        | true    | encode svg to `data:image/svg+xml` or return svg in string |
 
 ### options
 
@@ -62,8 +78,51 @@ const imageData = GenerateImage({
 | h        | -        | 150     | height |
 | bc       | -        | '#DDD'  | background color |
 | fc       | -        | '#999'  | foreground color |
-| t        | -        | ''      | texture: 'diagonal' or 'grid' |
+| t        | -        | ''      | texture: 'diagonal' |
 | c        | -        | ''      | text content |
+
+## SVG template
+
+```xml
+<svg
+    version="1.1"
+    baseProfile="full"
+    width="{ w }"
+    height="{ h }"
+    viewBox="0 0 { w } { h }"
+    xmlns="http://www.w3.org/2000/svg">
+  <!-- background color -->
+  <rect
+      width="100%"
+      height="100%" 
+      fill="{ bc }" />
+
+  <!-- texture: diagonal -->
+  <line
+      x1="0"
+      y1="0"
+      x2="{ w }"
+      y2="{ h }"
+      stroke="{ fc }"
+      stroke-width="1"
+      stroke-opacity="0.6" />
+  <line
+      x1="0"
+      y1="{ h }"
+      x2="{ w }"
+      y2="0"
+      stroke="{ fc }"
+      stroke-width="1"
+      stroke-opacity="0.6" />
+
+  <!-- text content -->
+  <text
+      x="{ w / 2 }"
+      y="{ h / 2 }"
+      text-anchor="middle"
+      fill="{ fc }">{ c }</text>
+</svg>
+```
 
 ### License
 

@@ -2,8 +2,9 @@
   "name": "generate-image",
   "version": "0.1.0",
   "description": "Generate images in browser and node.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "tsc && rollup tmp/index.js -o dist/index.js -f umd --name 'GenerateImage'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
