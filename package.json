@@ -1,0 +1,25 @@
+{
+  "name": "generate-image",
+  "version": "0.1.0",
+  "description": "Generate images in browser and node.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LearnShare/generate-image.git"
+  },
+  "keywords": [
+    "generate",
+    "image",
+    "browser",
+    "node"
+  ],
+  "author": "LearnShare",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LearnShare/generate-image/issues"
+  },
+  "homepage": "https://github.com/LearnShare/generate-image#readme"
+}
