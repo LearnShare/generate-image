@@ -101,10 +101,12 @@
      * @param attr {string} attribute name
      */
     GenerateImage.auto = function (attr) {
-        var list = document.querySelectorAll("img[" + attr);
+        var attrName = attr
+            || 'data-gi';
+        var list = document.querySelectorAll("img[" + attrName);
         list.forEach(function (item) {
             var options = {};
-            var value = item.getAttribute(attr);
+            var value = item.getAttribute(attrName);
             if (value) {
                 options = GenerateImage.parseOptions(value);
             }

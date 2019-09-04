@@ -139,12 +139,15 @@ GenerateImage.parseOptions = (value: string): GenerateImageOptions => {
  * Auto generate images for 'img[attr]'
  * @param attr {string} attribute name
  */
-GenerateImage.auto = (attr: string): void => {
-  const list = document.querySelectorAll(`img[${ attr }`);
+GenerateImage.auto = (attr?: string): void => {
+  const attrName = attr
+      || 'data-gi';
+
+  const list = document.querySelectorAll(`img[${ attrName }`);
   list.forEach((item) => {
     let options = {};
 
-    const value = item.getAttribute(attr);
+    const value = item.getAttribute(attrName);
     if (value) {
       options = GenerateImage.parseOptions(value);
     }
