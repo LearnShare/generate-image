@@ -27,13 +27,15 @@ interface GenerateImageOptions {
 
 /**
  * Generate Image
+ * @param options {GenerateImageOptions} generate options
+ * @param encode {boolean} encode to dataURI or not
  */
 const GenerateImage = (options?: GenerateImageOptions, encode?: boolean): any => {
   const _options = {
     w: 300,
     h: 150,
-    bc: '#DDD',
-    fc: '#999',
+    bc: '#F2F2F6',
+    fc: '#666',
     t: '',
     c: '',
   };
@@ -82,7 +84,8 @@ const GenerateImage = (options?: GenerateImageOptions, encode?: boolean): any =>
   }
 
   /**
-   * generate svg
+   * Generate SVG
+   * @returns {string} dataURI or xml
    */
   const generate = (): string => {
     const bg = `<rect width="100%" height="100%" fill="${ _options.bc }" />`;
@@ -101,8 +104,6 @@ const GenerateImage = (options?: GenerateImageOptions, encode?: boolean): any =>
 
     const svg = `<svg version="1.1" baseProfile="full" width="${ _options.w }" height="${ _options.h }" viewBox="0 0 ${ _options.w } ${ _options.h }" xmlns="http://www.w3.org/2000/svg">${ bg }${ line1 }${ line2 }${ text }</svg>`;
 
-    console.log(svg);
-
     return encode === false
         ? svg
         : `data:image/svg+xml,${ encodeURIComponent(svg) }`;
@@ -111,8 +112,46 @@ const GenerateImage = (options?: GenerateImageOptions, encode?: boolean): any =>
   return generate();
 };
 
-GenerateImage.auto = () => {
-  //
+/**
+ * Parse options string ("w=300&h=150&c='Hello World'") to GenerateImageOptions
+ * @param value {string} options string
+ * @returns {GenerateImageOptions} generate options
+ */
+GenerateImage.parseOptions = (value: string): GenerateImageOptions => {
+  const options: any = {};
+  console.log(value);
+  const list = value.split('&');
+  console.log(list);
+
+  list.forEach((item) => {
+    const attr = item.split('=');
+
+    options[attr[0]] = (attr[0] === 'w'
+      || attr[0] === 'h')
+        ? parseInt(attr[1])
+        : attr[1].replace(/['"]/g, '');
+  });
+
+  return options;
+};
+
+/**
+ * Auto generate images for 'img[attr]'
+ * @param attr {string} attribute name
+ */
+GenerateImage.auto = (attr: string): void => {
+  const list = document.querySelectorAll(`img[${ attr }`);
+  list.forEach((item) => {
+    let options = {};
+
+    const value = item.getAttribute(attr);
+    if (value) {
+      options = GenerateImage.parseOptions(value);
+    }
+    
+    const imageData = GenerateImage(options);
+    item.setAttribute('src', imageData);
+  });
 };
 
 export default GenerateImage;

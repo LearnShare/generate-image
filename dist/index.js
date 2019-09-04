@@ -6,13 +6,15 @@
 
     /**
      * Generate Image
+     * @param options {GenerateImageOptions} generate options
+     * @param encode {boolean} encode to dataURI or not
      */
     var GenerateImage = function (options, encode) {
         var _options = {
             w: 300,
             h: 150,
-            bc: '#DDD',
-            fc: '#999',
+            bc: '#F2F2F6',
+            fc: '#666',
             t: '',
             c: '',
         };
@@ -53,7 +55,8 @@
             _options.c = options.c;
         }
         /**
-         * generate svg
+         * Generate SVG
+         * @returns {string} dataURI or xml
          */
         var generate = function () {
             var bg = "<rect width=\"100%\" height=\"100%\" fill=\"" + _options.bc + "\" />";
@@ -68,15 +71,46 @@
                 text = "<text x=\"" + _options.w / 2 + "\" y=\"" + _options.h / 2 + "\" text-anchor=\"middle\" fill=\"" + _options.fc + "\">" + _options.c + "</text>";
             }
             var svg = "<svg version=\"1.1\" baseProfile=\"full\" width=\"" + _options.w + "\" height=\"" + _options.h + "\" viewBox=\"0 0 " + _options.w + " " + _options.h + "\" xmlns=\"http://www.w3.org/2000/svg\">" + bg + line1 + line2 + text + "</svg>";
-            console.log(svg);
             return encode === false
                 ? svg
                 : "data:image/svg+xml," + encodeURIComponent(svg);
         };
         return generate();
     };
-    GenerateImage.auto = function () {
-        //
+    /**
+     * Parse options string ("w=300&h=150&c='Hello World'") to GenerateImageOptions
+     * @param value {string} options string
+     * @returns {GenerateImageOptions} generate options
+     */
+    GenerateImage.parseOptions = function (value) {
+        var options = {};
+        console.log(value);
+        var list = value.split('&');
+        console.log(list);
+        list.forEach(function (item) {
+            var attr = item.split('=');
+            options[attr[0]] = (attr[0] === 'w'
+                || attr[0] === 'h')
+                ? parseInt(attr[1])
+                : attr[1].replace(/['"]/g, '');
+        });
+        return options;
+    };
+    /**
+     * Auto generate images for 'img[attr]'
+     * @param attr {string} attribute name
+     */
+    GenerateImage.auto = function (attr) {
+        var list = document.querySelectorAll("img[" + attr);
+        list.forEach(function (item) {
+            var options = {};
+            var value = item.getAttribute(attr);
+            if (value) {
+                options = GenerateImage.parseOptions(value);
+            }
+            var imageData = GenerateImage(options);
+            item.setAttribute('src', imageData);
+        });
     };
 
     return GenerateImage;

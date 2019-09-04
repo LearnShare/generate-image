@@ -1,6 +1,6 @@
 {
   "name": "generate-image",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Generate images in browser and node.",
   "main": "dist/index.js",
   "scripts": {

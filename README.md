@@ -23,7 +23,7 @@ or
 1\. Automatic:
 
 ```html
-<img src="" data-gi="w=300&h=150">
+<img src="" data-gi="w=300&h=150&c='Hello World'">
 
 <script>
   document.addEventListener('load', () => {
@@ -40,6 +40,8 @@ const target = document.getElementById('image-target');
 const imageData = GenerateImage({
   w: 300,
   h: 150,
+  t: 'diagonal',
+  c: 'Hello World',
 });
 target.src = imageData;
 ```
@@ -68,7 +70,7 @@ const imageData = GenerateImage({
 | argument | required | default | info |
 |----------|----------|---------|------|
 | options  | -        | -       | [options](#options) |
-| encode   | -        | true    | encode svg to `data:image/svg+xml` or return svg in string |
+| encode   | -        | true    | return dataURI or pure xml |
 
 ### options
 
@@ -76,8 +78,8 @@ const imageData = GenerateImage({
 |----------|----------|---------|------|
 | w        | -        | 300     | width |
 | h        | -        | 150     | height |
-| bc       | -        | '#DDD'  | background color |
-| fc       | -        | '#999'  | foreground color |
+| bc       | -        | '#F2F2F6' | background color |
+| fc       | -        | '#666'  | foreground color |
 | t        | -        | ''      | texture: 'diagonal' |
 | c        | -        | ''      | text content |
 
