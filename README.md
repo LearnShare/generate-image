@@ -46,6 +46,22 @@ const imageData = GenerateImage({
 target.src = imageData;
 ```
 
+### Font Additions
+```js
+const target = document.getElementById('image-target');
+
+const imageData = GenerateImage({
+  w: 300,
+  h: 150,
+  fs: '3em',
+  ff: 'Roboto',
+  fi: 'https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i',
+  t: 'diagonal',
+  c: 'Hello World',
+});
+target.src = imageData;
+```
+
 ### In Node
 
 ```js
@@ -80,6 +96,9 @@ const imageData = GenerateImage({
 | h        | -        | 150     | height |
 | bc       | -        | '#F2F2F6' | background color |
 | fc       | -        | '#666'  | foreground color |
+| fs       | -        | '2em'  | font size |
+| ff       | -        | ''  | font family |
+| fi       | -        | ''  | font family URL import |
 | t        | -        | ''      | texture: 'diagonal' |
 | c        | -        | ''      | text content |
 
@@ -93,10 +112,17 @@ const imageData = GenerateImage({
     height="{ h }"
     viewBox="0 0 { w } { h }"
     xmlns="http://www.w3.org/2000/svg">
+  <!-- font-family import -->
+  <defs>
+    <style>
+      @import url('{ fi }');
+    </style>
+  </defs>
+
   <!-- background color -->
   <rect
       width="100%"
-      height="100%" 
+      height="100%"
       fill="{ bc }" />
 
   <!-- texture: diagonal -->
@@ -122,7 +148,9 @@ const imageData = GenerateImage({
       x="{ w / 2 }"
       y="{ h / 2 }"
       text-anchor="middle"
-      fill="{ fc }">{ c }</text>
+      fill="{ fc }"
+      font-size="{ fs }"
+      font-family="{ ff }">{ c }</text>
 </svg>
 ```
 

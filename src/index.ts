@@ -16,6 +16,18 @@ interface GenerateImageOptions {
    */
   fc?: string,
   /**
+   * font size
+   */
+  fs?: string,
+  /**
+   * font family
+   */
+  ff?: string,
+  /**
+   * font family import
+   */
+  fi?: string,
+  /**
    * texture: 'diagonal'
    */
   t?: string,
@@ -36,6 +48,9 @@ const GenerateImage = (options?: GenerateImageOptions, encode?: boolean): any =>
     h: 150,
     bc: '#F2F2F6',
     fc: '#666',
+    fs: '2em',
+    ff: '',
+    fi: '',
     t: '',
     c: '',
   };
@@ -64,6 +79,21 @@ const GenerateImage = (options?: GenerateImageOptions, encode?: boolean): any =>
   if (options
       && options.fc) {
     _options.fc = options.fc;
+  }
+
+  if (options
+      && options.fs) {
+    _options.fs = options.fs;
+  }
+
+  if (options
+      && options.ff) {
+    _options.ff = options.ff;
+  }
+
+  if (options
+      && options.fi) {
+    _options.fi = options.fi;
   }
 
   if (options
@@ -99,10 +129,15 @@ const GenerateImage = (options?: GenerateImageOptions, encode?: boolean): any =>
 
     let text = '';
     if (_options.c) {
-      text = `<text x="${ _options.w / 2 }" y="${ _options.h / 2 }" text-anchor="middle" fill="${ _options.fc }">${ _options.c }</text>`;
+      text = `<text x="${ _options.w / 2 }" y="${ _options.h / 2 }" text-anchor="middle" fill="${ _options.fc }" font-size="${ _options.fs }" font-family="${ _options.ff }">${ _options.c }</text>`;
     }
 
-    const svg = `<svg version="1.1" baseProfile="full" width="${ _options.w }" height="${ _options.h }" viewBox="0 0 ${ _options.w } ${ _options.h }" xmlns="http://www.w3.org/2000/svg">${ bg }${ line1 }${ line2 }${ text }</svg>`;
+    let font_family_import = '';
+    if (_options.fi) {
+      font_family_import = `<defs><style>@import url('${ _options.fi }');</style></defs>`;
+    }
+
+    const svg = `<svg version="1.1" baseProfile="full" width="${ _options.w }" height="${ _options.h }" viewBox="0 0 ${ _options.w } ${ _options.h }" xmlns="http://www.w3.org/2000/svg">${ font_family_import }${ bg }${ line1 }${ line2 }${ text }</svg>`;
 
     return encode === false
         ? svg
@@ -151,7 +186,7 @@ GenerateImage.auto = (attr?: string): void => {
     if (value) {
       options = GenerateImage.parseOptions(value);
     }
-    
+
     const imageData = GenerateImage(options);
     item.setAttribute('src', imageData);
   });
